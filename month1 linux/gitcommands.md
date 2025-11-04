@@ -9,6 +9,8 @@ Document your first week learning Linux commands and structure.
 | `git push origin main` | Pushes to main branch (GitHub) |
 
 # moving files
+| Command | Description |
+|----------|--------------|
 | `mkdir new-folder-name` | Make a new directory if required |
 | `   git mv file-to-move.txt new-folder-name/` | moves a file or files to the folder |
 # repeat the commands above to stage and push to GitHub
