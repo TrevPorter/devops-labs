@@ -1,0 +1,1 @@
+Place screenshots here (e.g., UFW status, Fail2ban output, etc.)
