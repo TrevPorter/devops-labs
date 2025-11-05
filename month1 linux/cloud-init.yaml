@@ -1,0 +1,63 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+hostname: my-oracle-vm
+fqdn: my-oracle-vm.localdomain
+
+users:
+  - default
+  - name: {name}
+    gecos: {name}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: sudo,adm
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - {SSH keys here}
+
+packages:
+  - curl
+  - wget
+  - git
+  - vim
+  - htop
+  - net-tools
+  - ufw
+  - fail2ban
+
+write_files:
+  # Add a hardened SSH configuration file
+  - path: /etc/ssh/sshd_config.d/99-custom.conf
+    owner: root:root
+    permissions: '0644'
+    content: |
+      PermitRootLogin no
+      PasswordAuthentication no
+      X11Forwarding no
+      AllowTcpForwarding yes
+      ClientAliveInterval 120
+      ClientAliveCountMax 2
+      MaxAuthTries 3
+      MaxSessions 2
+      LogLevel VERBOSE
+      PubkeyAuthentication yes
+      AuthenticationMethods publickey
+
+runcmd:
+  # Set timezone
+  - timedatectl set-timezone {Enter timezone here}
+  
+  # Restart SSH service to apply new config
+  - systemctl restart sshd
+  
+  # Enable and start fail2ban
+  - systemctl enable fail2ban
+  - systemctl start fail2ban
+  
+  # Configure firewall
+  - ufw allow OpenSSH
+  - ufw allow 80/tcp
+  - ufw --force enable
+  
+
+
